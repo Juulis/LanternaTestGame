@@ -25,11 +25,6 @@ public class Game {
     Game() throws IOException {
         createTerminal();
 
-        createFood();
-        createMonster();
-        t.flush();
-
-
         while (game) {
             KeyStroke keyStroke = screen.pollInput();
             if (keyStroke != null && (keyStroke.getKeyType() == KeyType.ArrowUp)) {
@@ -49,7 +44,7 @@ public class Game {
             }
         }
         System.out.println("Game Over");
-        t.setCursorPosition(t.getTerminalSize().getColumns()/2, t.getTerminalSize().getRows()/2);
+        t.setCursorPosition(t.getTerminalSize().getColumns()/3, t.getTerminalSize().getRows()/2);
         t.putCharacter('G');
         t.putCharacter('A');
         t.putCharacter('M');
@@ -110,7 +105,6 @@ public class Game {
                 }
                 clearPos(oldPos[0], oldPos[1]);
                 placeObject(monster.get(i));
-                t.flush();
             }
         }
     }
@@ -152,12 +146,6 @@ public class Game {
             return true;
         }
 
-
-
-
-
-
-
         return false;
 
 
@@ -180,6 +168,7 @@ public class Game {
     void placeObject(Obj obj) throws IOException {
         t.setCursorPosition(obj.x, obj.y);
         t.putCharacter(obj.symbol);
+        t.flush();
     }
 
     void createTerminal() throws IOException {
@@ -195,9 +184,12 @@ public class Game {
 
         coloringScreen(size);
 
+        showPoints();
         player = new Obj(t.getTerminalSize().getColumns() / 2, t.getTerminalSize().getRows() / 2, 'X');
         placeObject(player);
-        showPoints();
+        createFood();
+        createMonster();
+
         t.flush();
     }
 
